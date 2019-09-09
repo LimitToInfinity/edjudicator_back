@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import datetime
 import django_heroku
+from django.conf import settings
+from django.http import HttpResponseRedirect
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '2hz%@w$!1f7h57a!^zyx&%fw(p37_=_ed8zjg%aaty@@(3nw_6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -58,6 +60,9 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
+
+SECURE_SSL_REDIRECT = True # [1]
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -193,3 +198,11 @@ JWT_AUTH = {
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+class SSLMiddleware(object):
+
+    def process_request(self, request):
+        if not any([settings.DEBUG, request.is_secure(), request.META.get("HTTP_X_FORWARDED_PROTO", "") == 'https']):
+            url = request.build_absolute_uri(request.get_full_path())
+            secure_url = url.replace("http://", "https://")
+            return HttpResponseRedirect(secure_url)
