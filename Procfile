@@ -1,1 +1,1 @@
-web: gunicorn edjudicator.wsgi
+web: gunicorn edjudicator_api.wsgi
