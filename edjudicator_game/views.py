@@ -27,6 +27,7 @@ class CreateHighScoresView(GenericAPIView):
     @validate_request_data
     def post(self, request, *args, **kwargs):
         new_high_score = HighScore.objects.create(
+            user=request.data["user"],
             value=request.data["value"],
         )
         return Response(
