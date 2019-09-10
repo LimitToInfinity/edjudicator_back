@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login
 
 from rest_framework_jwt.settings import api_settings
@@ -18,7 +19,7 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
 # Create your views here.
-class CreateHighScoresView(GenericAPIView):
+class CreateHighScoresView(LoginRequiredMixin, GenericAPIView):
     """ GET and POST highscores/ """
     queryset = HighScore.objects.all()
     serializer_class = HighScoreSerializer
@@ -27,7 +28,7 @@ class CreateHighScoresView(GenericAPIView):
     @validate_request_data
     def post(self, request, *args, **kwargs):
         new_high_score = HighScore.objects.create(
-            user=request.data["user"],
+            user=request.user,
             value=request.data["value"],
         )
         return Response(
@@ -80,7 +81,7 @@ class HighScoresDetailView(RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-class ListHighScoresView(ListAPIView):
+class ListHighScoresView(LoginRequiredMixin, ListAPIView):
     """ Provides a GET method handler. """
     queryset = HighScore.objects.all()
     serializer_class = HighScoreSerializer
