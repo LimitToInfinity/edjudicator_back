@@ -9,7 +9,7 @@ class HighScoreSerializer(serializers.ModelSerializer):
 
         def update(self, instance, validated_data):
             instance.value = validated_data.get("value", instance.value)
-            # instance.user = validated_data.get("user", instance.user)
+            instance.user = validated_data.get("user", instance.user)
             instance.save()
             return instance
 
