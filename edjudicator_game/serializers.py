@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class HighScoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = HighScore
-        fields = ("id", "user", "value")
+        fields = ("id", "value")
 
         def update(self, instance, validated_data):
             instance.value = validated_data.get("value", instance.value)
