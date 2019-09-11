@@ -5,7 +5,7 @@ from django.db import models
 class HighScore(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
         primary_key=True,
     )
     value = models.IntegerField(default=0)
