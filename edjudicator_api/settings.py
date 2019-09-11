@@ -61,8 +61,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-SECURE_SSL_REDIRECT = True # [1]
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True # [1]
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -200,10 +200,10 @@ JWT_AUTH = {
 # Activate Django-Heroku.
 django_heroku.settings(locals())
 
-class SSLMiddleware(object):
+# class SSLMiddleware(object):
 
-    def process_request(self, request):
-        if not any([settings.DEBUG, request.is_secure(), request.META.get("HTTP_X_FORWARDED_PROTO", "") == 'https']):
-            url = request.build_absolute_uri(request.get_full_path())
-            secure_url = url.replace("http://", "https://")
-            return HttpResponseRedirect(secure_url)
+#     def process_request(self, request):
+#         if not any([settings.DEBUG, request.is_secure(), request.META.get("HTTP_X_FORWARDED_PROTO", "") == 'https']):
+#             url = request.build_absolute_uri(request.get_full_path())
+#             secure_url = url.replace("http://", "https://")
+#             return HttpResponseRedirect(secure_url)
