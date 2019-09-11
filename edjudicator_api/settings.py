@@ -197,8 +197,6 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': None,
 }
 
-AUTH_USER_MODEL = 'edjudicator_game.User'
-
 # Activate Django-Heroku.
 django_heroku.settings(locals())
 
