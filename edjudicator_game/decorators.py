@@ -5,7 +5,7 @@ from rest_framework.views import status
 def validate_request_data(fn):
     def decorated(*args, **kwargs):
         # args[0] == GenericView Object
-        value = args[0].request.data.get("title", "")
+        value = args[0].request.data.get("value", "")
         if not value:
             return Response(
                 data={

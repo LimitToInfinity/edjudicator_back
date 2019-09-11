@@ -12,6 +12,7 @@ from rest_framework import permissions, status
 from .decorators import validate_request_data
 from .models import HighScore
 from .serializers import HighScoreSerializer, TokenSerializer, UserSerializer
+from edjudicator_game.permissions import IsUpdateHighScore
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -22,12 +23,15 @@ class CreateHighScoresView(GenericAPIView):
     """ GET and POST highscores/ """
     queryset = HighScore.objects.all()
     serializer_class = HighScoreSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsUpdateHighScore
+    ]
 
     @validate_request_data
     def post(self, request, *args, **kwargs):
         new_high_score = HighScore.objects.create(
-            # user=request.user,
+            user=request.user,
             value=request.data["value"],
         )
         return Response(
@@ -39,6 +43,10 @@ class HighScoresDetailView(RetrieveUpdateDestroyAPIView):
     """ GET, PUT, DELETE highscores/:id/ """
     queryset = HighScore.objects.all()
     serializer_class = HighScoreSerializer
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+        IsUpdateHighScore
+    ]
 
     def get(self, request, *args, **kwargs):
         try:
@@ -84,7 +92,10 @@ class ListHighScoresView(ListAPIView):
     """ Provides a GET method handler. """
     queryset = HighScore.objects.all()
     serializer_class = HighScoreSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly,
+    ]
 
 class LoginView(APIView):
     """ POST auth/login/ """
