@@ -15,15 +15,10 @@ import datetime
 import django_heroku
 from django.conf import settings
 from django.http import HttpResponseRedirect
-import dj_database_url
-import dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-dotenv_file = os.path.join(BASE_DIR, ".env")
-if os.path.isfile(dotenv_file):
-    dotenv.load_dotenv(dotenv_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -56,7 +51,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -108,8 +102,6 @@ DATABASES = {
     },
 }
 
-# DATABASES = {}
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -150,7 +142,6 @@ USE_TZ = True
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
     # When you enable API versioning, the request.version attribute will contain a string
@@ -215,7 +206,3 @@ class SSLMiddleware(object):
             url = request.build_absolute_uri(request.get_full_path())
             secure_url = url.replace("http://", "https://")
             return HttpResponseRedirect(secure_url)
-
-# AUTH_USER_MODEL = "users.CustomUser"
-
-del DATABASES['default']['OPTIONS']['sslmode']
