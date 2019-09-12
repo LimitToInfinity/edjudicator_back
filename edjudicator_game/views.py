@@ -124,19 +124,21 @@ class LoginView(APIView):
             username = user.username
             email = user.email
             token = serializer.data["token"]
+            value = user.highscore.value
             return Response(
                 data={
                     "id": key,
                     "username": username,
                     "email": email,
-                    "token": token
+                    "token": token,
+                    "value": value,
                 },
                 status=status.HTTP_201_CREATED
             )
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 class RegisterUsersView(APIView):
-    """ Post auth/register/ """
+    """ POST auth/register/ """
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, *args, **kwargs):
@@ -154,6 +156,7 @@ class RegisterUsersView(APIView):
             username=username, password=password, email=email
         )
         key = new_user.id
+        value = new_user.highscore.value
         user = authenticate(request, username=username, password=password)
         login(request, user)
         serializer = TokenSerializer(
@@ -171,7 +174,9 @@ class RegisterUsersView(APIView):
                 "id": key,
                 "username": username,
                 "email": email,
-                "token": token
+                "token": token,
+                "value": value
+
             },
             status=status.HTTP_201_CREATED
         )
