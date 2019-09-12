@@ -8,7 +8,7 @@ class TokenSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("username", "email")
+        fields = ("id", "username", "email")
 
 class HighScoreSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=True)
