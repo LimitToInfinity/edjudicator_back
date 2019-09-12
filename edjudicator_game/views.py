@@ -105,6 +105,7 @@ class LoginView(APIView):
     queryset = User.objects.all()
 
     def post(self, request, *args, **kwargs):
+        key = request.data.get("id", "")
         username = request.data.get("username", "")
         password = request.data.get("password", "")
         user = authenticate(request, username=username, password=password)
@@ -125,6 +126,7 @@ class LoginView(APIView):
             token = serializer.data["token"]
             return Response(
                 data={
+                    "id": key,
                     "username": username,
                     "email": email,
                     "token": token
@@ -138,6 +140,7 @@ class RegisterUsersView(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, *args, **kwargs):
+        key = request.data.get("id", "")
         username = request.data.get("username", "")
         password = request.data.get("password", "")
         email = request.data.get("email", "")
@@ -165,6 +168,7 @@ class RegisterUsersView(APIView):
         token = serializer.data["token"]
         return Response(
             data={
+                "id": key,
                 "username": username,
                 "email": email,
                 "token": token
